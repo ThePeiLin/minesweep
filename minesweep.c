@@ -185,6 +185,7 @@ void print()
 		printf("\n");
 	}
 	printf("\033[0m\033[%d;%dH",((int)(rline/2))+1,(rrow+2));
+	printf("\033[K");
 	printf("mines:%d",realBombNumber);
 }
 void moveUp()
@@ -243,16 +244,16 @@ void openBlock()
 					;tier+=(
 			{
 				int haveUnopenedBlock=1;
-				for(yt=tier;yt>(-tier-1)&&haveUnopenedBlock==1;yt--)
-					for(xt=tier;xt>(-tier-1)&&haveUnopenedBlock==1;xt-=((yt==tier)||(yt==(-tier)))?1:(tier*2))
+				for(yt=tier;yt>(-tier-1)&&haveUnopenedBlock==0;yt--)
+					for(xt=tier;xt>(-tier-1)&&haveUnopenedBlock==0;xt-=((yt==tier)||(yt==(-tier)))?1:(tier*2))
 						haveUnopenedBlock=(((y-yt>=1)&&(y-yt<=line)&&(x-xt>=1)&&(x-xt<=row))&&
 							(((pb[ARRY(x-xt-1,y-yt)].front!=4)&&(pb[ARRY(x-xt-1,y-yt)].back==0))
 							||((pb[ARRY(x-xt+1,y-yt)].front!=4)&&(pb[ARRY(x-xt+1,y-yt)].back==0))
 							||((pb[ARRY(x-xt,y-yt-1)].front!=4)&&(pb[ARRY(x-xt,y-yt-1)].back==0))
 							||((pb[ARRY(x-xt,y-yt+1)].front!=4)&&(pb[ARRY(x-xt,y-yt+1)].back==0)))
 							&&((pb[ARRY(x-xt,y-yt)].front==1)&&(pb[ARRY(x-xt,y-yt)].back!=9)))?
-					0
-					:1;
+					1
+					:0;
 				haveUnopenedBlock;
 			}))
 				for(yt=tier;yt>(-tier-1);yt--)
@@ -276,7 +277,7 @@ void flag()
 	switch(pb[ARRY(x,y)].front)
 	{
 		case 1:pb[ARRY(x,y)].front++;realBombNumber--;rrealBombNumber-=(pb[ARRY(x,y)].back==9)?1:0;break;
-		case 2:pb[ARRY(x,y)].front++;realBombNumber++;rrealBombNumber-=(pb[ARRY(x,y)].back==9)?1:0;break;
+		case 2:pb[ARRY(x,y)].front++;realBombNumber++;rrealBombNumber+=(pb[ARRY(x,y)].back==9)?1:0;break;
 		case 3:pb[ARRY(x,y)].front=1;break;
 	}
 	print();
